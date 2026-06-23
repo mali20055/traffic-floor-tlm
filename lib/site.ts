@@ -27,10 +27,10 @@ export const COMPANY = {
   /**
    * Google Maps embed (API anahtarı gerektirmez).
    *
-   * Serbest metin adres geocode'u yanlış pin verdiği için doğrudan
-   * koordinat kullanılıyor — en güvenilir key'siz yöntem budur.
-   * Konum: Karaman Çiftlik Yolu, İçerenköy Mah., Ataşehir / İstanbul.
+   * Google'ın resmi "Yerleştir" (/maps/embed?pb=) formatı — işletme pinine
+   * (Akademik Kaplama Çözümleri, İçerenköy / Ataşehir) doğrudan bağlıdır;
+   * key'siz en güvenilir yöntem budur.
    */
   mapsEmbedSrc:
-    "https://maps.google.com/maps?q=40.975811,29.107625&z=16&hl=tr&output=embed",
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d48195.92408233261!2d29.07237139285776!3d40.97611015039157!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cac9b49facf2bd%3A0x7e6923acbd1362b0!2zQWthZGVtaWsgS2FwbGFtYSDDh8O2esO8bWxlcmk!5e0!3m2!1str!2str!4v1782246465230!5m2!1str!2str",
 } as const;

@@ -260,7 +260,7 @@ export default function ContactView() {
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               className="border-0 grayscale-[35%] contrast-110"
-              allowFullScreen
+              allowFullScreen={true}
             />
           </div>
         </div>
