@@ -2,6 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import { Wrench, Phone, Mail } from "lucide-react";
 import Logo from "@/components/Logo";
+import { COMPANY } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Sitemiz Yenileniyor — Traffic Floor",
@@ -37,13 +38,13 @@ export default function MaintenancePage() {
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
           <a
-            href="tel:+902164443230"
+            href={COMPANY.phoneHref}
             className="inline-flex items-center justify-center gap-2 bg-[#f97316] hover:bg-[#ea580c] text-white text-sm font-semibold px-6 py-3 transition-colors"
           >
-            <Phone className="w-4 h-4" /> +90 (216) 444 32 30
+            <Phone className="w-4 h-4" /> {COMPANY.phoneDisplay}
           </a>
           <a
-            href="mailto:info@akademikinsaat.com.tr"
+            href={COMPANY.emailHref}
             className="inline-flex items-center justify-center gap-2 border border-zinc-700 hover:bg-white/5 text-white text-sm font-semibold px-6 py-3 transition-colors"
           >
             <Mail className="w-4 h-4" /> E-posta Gönder

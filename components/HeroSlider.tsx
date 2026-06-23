@@ -9,10 +9,9 @@ import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 /**
  * Tam ekran ana sayfa hero slider'ı.
  *
- * GÖRSEL EKLEME: Her slide'ın `image` alanı şu an boş (undefined). Gerçek
- * fotoğrafı eklemek için ilgili slide'a `image: "/hero/slide-1.jpg"` yazın ve
- * dosyayı `public/hero/` klasörüne koyun. `image` boşken arka planda `gradient`
- * gösterilir. Önerilen görsel: 1920×1080 (16:9), yatay, < 500 KB (jpg/webp).
+ * GÖRSEL: Arka plan fotoğrafları Sanity'deki gerçek referans projelerinden
+ * (industries, garages …) `images` prop'u ile beslenir. Görsel gelmezse ilgili
+ * slide'da `gradient` placeholder gösterilir.
  */
 type Slide = {
   title: string;
@@ -27,7 +26,7 @@ type Slide = {
 const SLIDES: Slide[] = [
   {
     title: "Endüstriyel Zeminlerde Fransız Kalitesi",
-    subtitle: "45 yıllık TLM mühendisliği, Türkiye'de Akademik İnşaat güvencesiyle.",
+    subtitle: "1978'den bu yana TLM mühendisliği, Türkiye'de Akademik İnşaat güvencesiyle.",
     cta: { label: "Ürünleri İncele", href: "/urunler" },
     image: undefined,
     gradient: "linear-gradient(135deg, #1c1f24 0%, #0f1113 55%, #2a1505 100%)",
@@ -40,8 +39,8 @@ const SLIDES: Slide[] = [
     gradient: "linear-gradient(135deg, #14181c 0%, #0f1113 50%, #102027 100%)",
   },
   {
-    title: "Kuru Döşeme, Sıfır Üretim Kaybı",
-    subtitle: "Yapıştırıcısız kilit sistemi sayesinde üretiminizi durdurmadan döşeme.",
+    title: "Kuru Döşeme, Üretimi Durdurmadan",
+    subtitle: "Yapıştırıcısız kilit sistemi sayesinde tesis çalışırken hızlı döşeme.",
     cta: { label: "Teklif Al", href: "/iletisim" },
     image: undefined,
     gradient: "linear-gradient(135deg, #1a1410 0%, #0f1113 55%, #2a1505 100%)",
@@ -50,10 +49,17 @@ const SLIDES: Slide[] = [
 
 const AUTOPLAY_MS = 5000;
 
-export default function HeroSlider() {
+/**
+ * @param images Sanity'den gelen gerçek arka plan fotoğrafları. Sırayla
+ * slide'lara dağıtılır; eksik kalan slide'lar gradient gösterir.
+ */
+export default function HeroSlider({ images = [] }: { images?: string[] }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
-  const count = SLIDES.length;
+
+  // Sanity görsellerini slide'lara bağla (varsa hardcoded image'i ezer).
+  const slides = SLIDES.map((s, i) => ({ ...s, image: images[i] ?? s.image }));
+  const count = slides.length;
 
   const go = useCallback((dir: number) => {
     setIndex((prev) => (prev + dir + count) % count);
@@ -71,7 +77,7 @@ export default function HeroSlider() {
     };
   }, [paused, count]);
 
-  const slide = SLIDES[index];
+  const slide = slides[index];
 
   return (
     <section

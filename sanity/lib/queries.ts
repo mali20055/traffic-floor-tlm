@@ -27,6 +27,15 @@ export const productsQuery = groq`*[_type == "product"] | order(order asc) ${pro
 export const productBySlugQuery = groq`*[_type == "product" && slug.current == $slug][0] ${productProjection}`;
 export const productSlugsQuery = groq`*[_type == "product" && defined(slug.current)].slug.current`;
 
+/**
+ * Hero slider için gerçek uygulama fotoğrafları.
+ * Asset yükleme script'iyle oluşturulan gerçek referans projelerinin
+ * (industries, garages, supermarkets …) kapak görsellerini, en çok galeriye
+ * sahip (yani en kapsamlı) projeden başlayarak döner.
+ */
+export const heroImagesQuery = groq`*[_type == "project" && _id match "project-asset-*" && defined(coverImage.asset)]
+  | order(count(gallery) desc)[0...6].coverImage.asset->url`;
+
 // --- Projects ---
 export const projectsQuery = groq`*[_type == "project"] | order(order asc){
   title,

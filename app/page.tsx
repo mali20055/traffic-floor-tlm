@@ -12,36 +12,36 @@ import {
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import HeroSlider from "@/components/HeroSlider";
-import { getProjects, getBlogPosts } from "@/sanity/lib/fetch";
+import { getProjects, getBlogPosts, getHeroImages } from "@/sanity/lib/fetch";
 
 export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Traffic Floor — Endüstriyel Zemin Sistemleri | Akademik İnşaat",
   description:
-    "Fransız Groupe TLM güvencesiyle ağır trafik ve yoğun forklift için kilitlemeli PVC zemin karoları, reçine sistemleri ve hijyenik duvar/tavan kaplamaları. Türkiye resmi distribütörü.",
+    "Fransız Groupe TLM güvencesiyle ağır trafik ve yoğun forklift için kilitlemeli PVC zemin karoları: Traficline, Standline, Decoline, Visiofloor, Exelia ve Fitline. Türkiye resmi distribütörü.",
 };
 
 const CATEGORIES = [
   {
     id: "heavy",
     title: "Ağır Trafik ve Forklift Zeminleri",
-    desc: "7 mm kilitli PVC karolar. Yapıştırıcısız döşenen, forklift trafiğine ve aşınmaya dayanıklı sanayi zeminleri.",
+    desc: "Traficline 5/7 mm kilitli PVC karolar. Yapıştırıcısız döşenen, forklift trafiğine ve aşınmaya dayanıklı sanayi zeminleri.",
     badge: "CSTB U4P4",
     gradient: "from-[#2a1505] to-[#16181b]",
   },
   {
-    id: "light-medium",
-    title: "Reçine ve Hafif-Orta Trafik",
-    desc: "Laboratuvar, hastane ve gıda alanları için tozumayan, kolay temizlenen reçine zemin kaplamaları.",
-    badge: "Gıda Onaylı",
+    id: "heavy",
+    title: "Drene Karo ve Dış Mekan",
+    desc: "Standline 14 mm drene edilebilir ızgara karolar. Otopark, oto yıkama ve ıslak alanlar için sıvı tahliyeli zemin.",
+    badge: "14 mm Drene",
     gradient: "from-[#102027] to-[#16181b]",
   },
   {
-    id: "wall-ceiling",
-    title: "Duvar Koruma ve Tavan Sistemleri",
-    desc: "Hastane koridorları için darbe panelleri ve nem önleyici hijyenik tavan profilleri.",
-    badge: "Antibakteriyel",
+    id: "light-medium",
+    title: "Tasarım, Ticari ve Spor Zeminleri",
+    desc: "Decoline, Visiofloor, Exelia ve Fitline; ofis, mağaza, showroom ve spor salonları için tasarım ve kauçuk zeminler.",
+    badge: "Tasarım & Spor",
     gradient: "from-[#1f1209] to-[#16181b]",
   },
 ];
@@ -54,8 +54,8 @@ const TRUST_ITEMS = [
   },
   {
     icon: ShieldCheck,
-    title: "10 Yıl Garanti",
-    p: "Traficline 7 mm karolar aşınmaya karşı 10 yıl fabrika garantilidir.",
+    title: "Yüksek Aşınma Direnci",
+    p: "Traficline karolar CSTB U4 P4 sınıfıyla ağır sanayi trafiğine ve aşınmaya dayanıklıdır.",
   },
   {
     icon: FileCheck,
@@ -70,13 +70,17 @@ const TRUST_ITEMS = [
 ];
 
 export default async function HomePage() {
-  const [projects, blogs] = await Promise.all([getProjects(), getBlogPosts()]);
+  const [projects, blogs, heroImages] = await Promise.all([
+    getProjects(),
+    getBlogPosts(),
+    getHeroImages(),
+  ]);
   return (
     <div className="min-h-screen bg-[#0f1113] flex flex-col selection:bg-[#f97316] selection:text-white text-[#e2e8f0]">
       <SiteHeader active="home" />
 
       {/* HERO SLIDER (tam genişlik) */}
-      <HeroSlider />
+      <HeroSlider images={heroImages} />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-12">
         <div className="space-y-16 animate-fadeIn">
@@ -88,9 +92,9 @@ export default async function HomePage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {CATEGORIES.map((cat) => (
+              {CATEGORIES.map((cat, i) => (
                 <Link
-                  key={cat.id}
+                  key={i}
                   href="/urunler"
                   className="group relative overflow-hidden border border-zinc-800 hover:border-[#f97316] transition-all flex flex-col justify-between min-h-[260px]"
                 >

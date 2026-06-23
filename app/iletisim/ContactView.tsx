@@ -3,12 +3,16 @@
 import React, { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { MapPin, Phone, Mail } from "lucide-react";
+import { COMPANY } from "@/lib/site";
 
 const PRODUCT_OPTIONS = [
   "Genel Değerlendirme",
-  "Ağır Trafik ve Forklift Zeminleri",
-  "Reçine ve Hafif-Orta Trafik",
-  "Duvar Koruma ve Tavan Sistemleri",
+  "Traficline® (Ağır Trafik PVC Karo)",
+  "Standline® (Drene Edilebilir Karo)",
+  "Decoline® (Tasarım PVC)",
+  "Visiofloor® (Baskılı Zemin)",
+  "Exelia® (Görünmez Kilit)",
+  "Fitline® (Kauçuk Spor Zemin)",
 ];
 
 export default function ContactView() {
@@ -29,14 +33,51 @@ export default function ContactView() {
   });
   const [contactSubmitted, setContactSubmitted] = useState(false);
   const [submittingForm, setSubmittingForm] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
-  const handleContactSubmit = (e: React.FormEvent) => {
+  // Formspree (veya benzeri) endpoint'i. Tanımlı değilse form simülasyon modunda
+  // çalışır — yapı hazır, endpoint .env.local'a eklenince otomatik aktifleşir.
+  const FORM_ENDPOINT = process.env.NEXT_PUBLIC_FORM_ENDPOINT;
+
+  const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError(null);
     setSubmittingForm(true);
-    setTimeout(() => {
-      setSubmittingForm(false);
+
+    // Endpoint yoksa: gerçek gönderim yapılmadan başarı durumuna geç (simülasyon).
+    if (!FORM_ENDPOINT) {
+      setTimeout(() => {
+        setSubmittingForm(false);
+        setContactSubmitted(true);
+      }, 1200);
+      return;
+    }
+
+    try {
+      const res = await fetch(FORM_ENDPOINT, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: JSON.stringify({
+          "Ad Soyad": contactForm.name,
+          "Firma": contactForm.company,
+          "E-posta": contactForm.email,
+          "Telefon": contactForm.phone,
+          "Alan (m²)": contactForm.areaSize,
+          "Ürün": contactForm.productName,
+          "Konu": contactForm.subject,
+          "Mesaj": contactForm.message,
+          _subject: contactForm.subject,
+        }),
+      });
+      if (!res.ok) throw new Error("send-failed");
       setContactSubmitted(true);
-    }, 1200);
+    } catch {
+      setFormError(
+        "Form gönderilemedi. Lütfen tekrar deneyin veya doğrudan e-posta/telefon ile ulaşın.",
+      );
+    } finally {
+      setSubmittingForm(false);
+    }
   };
 
   return (
@@ -49,9 +90,9 @@ export default function ContactView() {
               ✓
             </div>
             <div className="space-y-2">
-              <h3 className="font-display font-medium text-lg text-white">Talebiniz alındı</h3>
+              <h3 className="font-display font-medium text-lg text-white">Teşekkürler</h3>
               <p className="text-sm text-zinc-400 leading-relaxed">
-                Talebiniz ekibimize iletildi. En kısa sürede sizinle iletişime geçeceğiz.
+                Teşekkürler, en kısa sürede dönüş yapacağız.
               </p>
             </div>
             <button
@@ -156,6 +197,12 @@ export default function ContactView() {
               />
             </div>
 
+            {formError && (
+              <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 px-3 py-2">
+                {formError}
+              </p>
+            )}
+
             <button
               type="submit"
               disabled={submittingForm}
@@ -178,8 +225,8 @@ export default function ContactView() {
               <div>
                 <p className="text-white font-semibold">Adres</p>
                 <p className="text-zinc-400 mt-1 leading-relaxed">
-                  İçerenköy Mah. Karaman Çiftlik Yolu, Özlü Apt. No:42 Daire:7,<br />
-                  Ataşehir / İstanbul
+                  {COMPANY.address.line1},<br />
+                  {COMPANY.address.line2}
                 </p>
               </div>
             </div>
@@ -188,7 +235,7 @@ export default function ContactView() {
               <Phone className="w-4 h-4 text-[#f97316] shrink-0" />
               <div>
                 <p className="text-zinc-500 text-xs">Telefon</p>
-                <a href="tel:+902164443230" className="text-white font-semibold hover:underline">+90 (216) 444 32 30</a>
+                <a href={COMPANY.phoneHref} className="text-white font-semibold hover:underline">{COMPANY.phoneDisplay}</a>
               </div>
             </div>
 
@@ -196,7 +243,7 @@ export default function ContactView() {
               <Mail className="w-4 h-4 text-[#f97316] shrink-0" />
               <div>
                 <p className="text-zinc-500 text-xs">E-posta</p>
-                <a href="mailto:info@akademikinsaat.com.tr" className="text-white font-semibold hover:underline">info@akademikinsaat.com.tr</a>
+                <a href={COMPANY.emailHref} className="text-white font-semibold hover:underline">{COMPANY.email}</a>
               </div>
             </div>
           </div>
@@ -207,7 +254,7 @@ export default function ContactView() {
           <div className="h-72 w-full overflow-hidden border border-zinc-800">
             <iframe
               title="Traffic Floor — Ataşehir / İstanbul konumu"
-              src="https://www.google.com/maps?q=İçerenköy+Mah.+Karaman+Çiftlik+Yolu+Özlü+Apt+No:42+Ataşehir+İstanbul&output=embed"
+              src={COMPANY.mapsEmbedSrc}
               width="100%"
               height="100%"
               loading="lazy"

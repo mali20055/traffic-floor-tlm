@@ -11,12 +11,12 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: "Ürünler — Endüstriyel Zemin Sistemleri | Traffic Floor",
   description:
-    "Ağır trafik kilitlemeli PVC karolar, hijyenik reçine zeminler ve darbe dayanımlı duvar/tavan kaplamaları. CSTB UPEC ve CE sertifikalı endüstriyel zemin mühendislik kataloğu.",
+    "Traficline ve Standline ağır trafik PVC karolar; Decoline, Visiofloor, Exelia tasarım zeminleri ve Fitline kauçuk spor zemini. CSTB ve CE sertifikalı endüstriyel zemin kataloğu.",
 };
 
 const CATEGORY_TITLES: Record<string, string> = {
-  heavy: "Ağır Trafik ve Forklift Zeminleri",
-  "light-medium": "Reçine ve Hafif-Orta Trafik",
+  heavy: "Endüstriyel ve Ağır Trafik Zeminleri",
+  "light-medium": "Tasarım, Ticari ve Spor Zeminleri",
   "wall-ceiling": "Duvar Koruma ve Tavan Sistemleri",
 };
 
@@ -39,6 +39,8 @@ export default async function ProductsPage() {
 
         {CATEGORY_ORDER.map((catKey) => {
           const filtered = products.filter((p) => p.category === catKey);
+          // Ürünü olmayan kategori başlığını gösterme.
+          if (filtered.length === 0) return null;
           return (
             <div key={catKey} className="space-y-4">
               <div className="border-b border-zinc-800 pb-2">
@@ -71,7 +73,7 @@ export default async function ProductsPage() {
                       </div>
                     </div>
                     <div className="p-4 pt-0 border-t border-zinc-800 mt-2 flex justify-between items-center bg-zinc-900/10">
-                      <span className="text-xs text-zinc-500">10 yıl garantili</span>
+                      <span className="text-xs text-zinc-500">CE & CSTB belgeli</span>
                       <span className="text-sm text-[#f97316] group-hover:underline flex items-center gap-0.5 font-semibold">
                         İncele <ChevronRight className="w-3.5 h-3.5" />
                       </span>

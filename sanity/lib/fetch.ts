@@ -11,6 +11,7 @@ import {
   blogSlugsQuery,
   galleryQuery,
   documentsQuery,
+  heroImagesQuery,
 } from "./queries";
 import type {
   SssItem,
@@ -39,6 +40,11 @@ export function getProducts(): Promise<Product[]> {
 
 export function getProjects(): Promise<Project[]> {
   return client.fetch<Project[]>(projectsQuery, {}, opts);
+}
+
+/** Hero slider arka plan görselleri (gerçek referans proje fotoğrafları). */
+export function getHeroImages(): Promise<string[]> {
+  return client.fetch<string[]>(heroImagesQuery, {}, opts);
 }
 
 export function getGalleryItems(): Promise<GalleryItem[]> {

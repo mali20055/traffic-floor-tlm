@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { ShieldCheck, Menu, X, ChevronRight } from "lucide-react";
 import Logo from "./Logo";
+import { COMPANY } from "@/lib/site";
 
 type NavItem = { id: string; label: string; href: string };
 
@@ -34,8 +35,8 @@ export default function SiteHeader({ active }: { active?: string }) {
           <span className="flex items-center gap-1.5">
             <ShieldCheck className="w-3.5 h-3.5 text-[#f97316]" /> Groupe TLM Türkiye Resmi Distribütörü
           </span>
-          <a href="tel:+902164443230" className="text-zinc-300 hover:text-white transition-colors">
-            +90 (216) 444 32 30
+          <a href={COMPANY.phoneHref} className="text-zinc-300 hover:text-white transition-colors">
+            {COMPANY.phoneDisplay}
           </a>
         </div>
       </div>

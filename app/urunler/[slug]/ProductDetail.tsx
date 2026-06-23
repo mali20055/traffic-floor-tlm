@@ -15,6 +15,13 @@ export default function ProductDetail({
   const [lightbox, setLightbox] = useState<string | null>(null);
   const [downloadLogs, setDownloadLogs] = useState<Record<string, number>>({});
 
+  // "Teknik Katalog İndir" hedefi: ürünün kendi geçerli pdfUrl'i yoksa
+  // Sanity'deki gerçek katalog dokümanına (fileUrl) düş.
+  const catalogUrl =
+    (product.pdfUrl && product.pdfUrl.includes("cdn.sanity.io") ? product.pdfUrl : null) ??
+    documents.find((d) => d.category === "catalogue" && d.fileUrl)?.fileUrl ??
+    null;
+
   const triggerDownload = (id: string, title: string) => {
     setDownloadLogs((prev) => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
     alert(`"${title}" dosyası henüz yüklenmedi.`);
@@ -119,12 +126,24 @@ export default function ProductDetail({
               <p className="text-sm font-bold text-white">Bu ürün için teklif alın</p>
               <p className="text-xs text-zinc-400">Ücretsiz numune ve keşif dahildir.</p>
             </div>
-            <Link
-              href={`/iletisim?urun=${encodeURIComponent(product.title)}`}
-              className="bg-[#f97316] hover:bg-[#ea580c] text-white text-sm font-semibold px-5 py-2.5 rounded-none w-full sm:w-auto text-center"
-            >
-              Teklif Al
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+              {catalogUrl && (
+                <a
+                  href={catalogUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-1.5 border border-zinc-700 hover:border-[#f97316] text-white text-sm font-semibold px-5 py-2.5 rounded-none w-full sm:w-auto text-center transition-colors"
+                >
+                  <Download className="w-4 h-4" /> Teknik Katalog İndir
+                </a>
+              )}
+              <Link
+                href={`/iletisim?urun=${encodeURIComponent(product.title)}`}
+                className="bg-[#f97316] hover:bg-[#ea580c] text-white text-sm font-semibold px-5 py-2.5 rounded-none w-full sm:w-auto text-center"
+              >
+                Teklif Al
+              </Link>
+            </div>
           </div>
         </div>
       </div>
