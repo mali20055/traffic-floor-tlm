@@ -1,0 +1,17 @@
+node_modules/
+.next/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Sanity
+.sanity/
+
+# Ham görsel/PDF varlıkları — GitHub'a yüklenmez (~550 MB, veriler Sanity'de).
+# Yerelde tutulur; gerekirse upload script'i ile Sanity'ye yüklenir.
+traffic-floor-assets/
