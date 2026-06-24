@@ -20,7 +20,7 @@ export const COMPANY = {
   emailHref: "mailto:info@traficlineturkiye.com",
 
   address: {
-    line1: "İçerenköy Mah. Karaman Çiftlik Yolu, Özlü Apt. No:42 Daire:7",
+    line1: "İçerenköy Mah. Karaman Çiftlik Yolu, Özlü Apt. No:42 Daire:9",
     line2: "Ataşehir / İstanbul",
   },
 
